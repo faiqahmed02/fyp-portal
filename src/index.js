@@ -3,11 +3,24 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import persistStore from 'redux-persist/es/persistStore';
+import { store } from "./Store";
+import { ThemeProvider } from 'react-bootstrap';
+
+let persistor = persistStore(store);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <ThemeProvider
+        breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
+        minBreakpoint="xxs"
+      >
+        <App />
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );
 
