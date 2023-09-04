@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import TextsFieldsInput from '../../Inputs/TextsFieldsInput'
 import { v4 as uuid } from 'uuid';
@@ -12,31 +12,50 @@ function AddStudentData(props) {
     const dispatch = useDispatch();
     console.log(small_id);
     const [students, setStudents] = useState([]);
-    const [studentData, setStudentData] = useState(studentState.length ? studentState : {
+    const [studentData, setStudentData] = useState({
         studentId: small_id,
         sName: '',
         sEmail: '',
     });
+    const [subClicked, setSubClicked] = useState(false)
 
 
 
     const handleInputChange = event => {
         const { name, value } = event.target;
-        setStudentData(prevData => ({
-            ...prevData,
+        setStudentData({
+            ...studentData,
             [name]: value,
-        }));
+        });
+        console.log(studentData);
     };
-    console.log(studentState);
+    // console.log(studentState);
     const handleAddStudent = (e) => {
         e.preventDefault()
-        setStudents(prevStudents => [...prevStudents, studentData]);
-        console.log(students);
-        dispatch(StudentRed(students))
-        setStudentData({ studentId: small_id, sName: '', sEmail: '' });
+        if (studentData.sName && studentData.sEmail) {
+            setStudents([
+                ...studentState,
+                studentData]
+            );
+
+            setSubClicked(true)
+        } else {
+            alert("What are you doing add data first")
+        }
+
     };
+    useEffect(() => {
+        if (subClicked) {
+            dispatch(StudentRed(students));
+            setStudentData({ studentId: small_id, sName: '', sEmail: '' });
+            console.log(students);
+        }
+
+
+    }, [students])
+
     return (
-        <Form>
+        <Form onSubmit={handleAddStudent}>
             <TextsFieldsInput
                 name="sName"
                 onTextChange={handleInputChange}
@@ -53,7 +72,7 @@ function AddStudentData(props) {
                 ControlId="studentId"
                 label="Student Email"
             />
-            <Button type='submit' onClick={handleAddStudent} >Add Student</Button>
+            <Button type='submit' onClick={props.handleClose} style={{marginTop: 10}} >Add Student</Button>
         </Form>
     )
 }

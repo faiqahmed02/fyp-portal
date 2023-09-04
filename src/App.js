@@ -20,7 +20,7 @@ function App() {
       <Router>
         <Routes>
           <Route path='/' Component={Login} />
-          <Route path='/login' Component={SignUp} />
+          <Route path='/register' Component={SignUp} />
           <Route path='/mainwindow' Component={MainDashbord} />
           <Route path='/mainwindow/:prams' Component={MainDashbord} />
         </Routes>
